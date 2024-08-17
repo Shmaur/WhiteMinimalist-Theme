@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<% 
+        const bloggerName =  subRoot.note.getLabelValue("bloggerName") ;
+        const siteName =  subRoot.note.getLabelValue("siteName") ;
+        const siteDescription =  note.getLabelValue("summary") ;
+        const siteDesc = subRoot.note.getLabelValue("siteDescription") ;
+        const bloggerAvatar  = `api/images/${subRoot.note.getRelation("bloggerAvatar").value}/博主头像`
+        var count = 0;
+        
+        function getDaysAgo(dateStr) {
+          const date = new Date(dateStr);
+          const currentDate = new Date();
+          const delta = currentDate - date;
+          const days = Math.floor(delta / (1000 * 60 * 60 * 24));
+    
+          if (days === 0) {return "今天";
+          } else if (days === 1) {return "昨天";
+          } else if (days === 2) {return "前天";
+          } else if (days < 7) {return `${days}天前`;
+          } else if (days < 30) {const weeks = Math.floor(days / 7);return `${weeks}周前`;
+          } else if (days <365) {const months = Math.floor(days /30);return `${months}个月前`;
+          } else{const years = Math.floor(days/365);return `${years}年前`;}
+        }
+        %>
+
+<head>
+  <meta charset="UTF-8">
+    
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= note.hasLabel("timeLineRoot") ? `${siteName}` : `${note.title} - ${siteName}` %></title>
+    <meta name="google-site-verification" content="iroqkrsf_d8oe0ztJJMFMtl9MBbU4UE41WWaUWg5oxc" />
+    <link rel="canonical" href="https://www.shmaur.com/<%= note.noteId %>" />
+  <meta name="keywords" content="<%= subRoot.note.getLabelValue("siteKeywords") %>">
+  <meta name="author" content="<%= bloggerName%> shmaur">
+  <meta name="copyright" content="<%= bloggerName%>">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#4961ff">
+    <meta name="twitter:site" content="<%= siteName%>">
+    <meta name="twitter:author" content="<%= bloggerName%> shmaur">
+    <meta name="twitter:title" content="<%= note.hasLabel("timeLineRoot") ? `${siteName}` : `${note.title} - ${siteName}` %>">
+    <meta name="twitter:description" content="<%= siteDescription %>">
+    <meta name="og:description" content="<%= siteDescription %>">
+  <meta name="description" content="<%= siteDescription %>">
+  <meta name="description" content="<%= siteDesc %>">
+  <meta name="baidu-site-verification" content="codeva-M2saKX87ZE" />
+    <meta name="msvalidate.01" content="C863E6EC1230A282B5E5FD5BD61D628D" />
+    
+  <link href="api/notes/<%= note.getRelation("prismCSS").value %>/download" rel="stylesheet">
+  <script type="module" src="api/notes/<%= note.getRelation("prismJS").value %>/download"></script>
+  <!-- 图片预览-->
+    <script type="module" src="api/notes/<%= note.getRelation("viewerJS").value %>/download"></script>
+    <link rel="stylesheet" href="api/notes/<%= note.getRelation("viewerCSS").value %>/download">
+   <% for (const viewerCSS of note.getRelations("viewerCSS.css")) { %>
+  <link rel="stylesheet" href="api/notes/<%= viewerCSS.value %>/download">
+  <% } %>
+    <!-- 图片预览-->
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-screen-webfont/style.css" media="print" onload="this.media='all'">
+  <% if (note.hasRelation("shareFavicon")) { %>
+  <link rel="shortcut icon" href="api/notes/<%= note.getRelation("shareFavicon").value %>/download">
+  <% } else { %>
+  <link rel="shortcut icon" href="../favicon.ico">
+  <% } %>
+  <% for (const cssRelation of note.getRelations("shareCss")) { %>
+  <link href="api/notes/<%= cssRelation.value %>/download" rel="stylesheet">
+  <% } %>
+  <% for (const jsRelation of note.getRelations("shareJs")) { %>
+  <script type="module" src="api/notes/<%= jsRelation.value %>/download"></script>
+  <% } %>
+  <% if (note.isLabelTruthy('shareDisallowRobotIndexing')) { %>
+  <meta name="robots" content="noindex,follow" />
+  <% } %>
+  <%- header %>
+    <!--umami-->
+    <script defer src="https://umami.shmaur.com/script.js" data-website-id="947cdc5b-41b4-4477-92d1-a0b165811c0c"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/css-doodle/0.39.1/css-doodle.min.js"></script>
+  <script src="https://cdn.staticfile.net/twikoo/1.6.36/twikoo.all.min.js"></script>
+     <style typt="text/css">
+
+         #bloggerInfo img{
+             width: 3rem;
+             height: 3rem;
+         }
+
+         #contentHeader{
+            justify-content: center;
+         }
+         
+         .bloggerInfoCardStyle{
+             max-height:none;
+         }
+    </style>
+     <!-- 友链样式-->
+   <link rel="stylesheet" href="api/notes/<%= note.getRelation("linkCss").value %>/download">
+     <!-- 首页样式-->
+   <link rel="stylesheet" href="api/notes/<%= note.getRelation("homeCss").value %>/download">
+    <!-- 导航样式-->
+     <link rel="stylesheet" href="api/notes/<%= note.getRelation("navCss").value %>/download">
+     <!-- 底部样式-->
+     <link rel="stylesheet" href="api/notes/<%= note.getRelation("footerCss").value %>/download">
+     <!-- 内容样式-->
+     <link rel="stylesheet" href="api/notes/<%= note.getRelation("mainCss").value %>/download">
+     <!-- 留言样式-->
+     <link rel="stylesheet" href="api/notes/<%= note.getRelation("messages").value %>/download">
+    <script type="module" src="api/notes/<%= note.getRelation("shmaurJS").value %>/download"></script>
+    
+</head>
+
+<%
+    const headingRe = /(<h[1-6]\s*(?:[^>]+\s*)*>)(.+?)(<\/h[1-6]>)/g;
+    const headingMatches = [...content.matchAll(headingRe)];
+    const slugify = (text) => text.replace(/\s/g, " ");
+    console.log(headingMatches)
+  
+    content = content.replaceAll(headingRe, (...match) => {
+    const regex = /(<([^>]+)>)/ig;
+        const tocTextContent = slugify(match[2]).replace(regex, '')
+        match[0] = match[0].replace(match[3], `<a id="${tocTextContent}" class="toc-anchor" name="${tocTextContent}" href="#${tocTextContent}">※</a>${match[3]}`);
+        return match[0];
+    }).replaceAll(/class="language-text-x-(\w+)"/g , (...match) => {
+        match[0] = match[0].replace("-text-x", "");
+        return match[0];
+    }).replaceAll( /class="language-text-(\w+)"/g , (...match) => {
+        match[0] = match[0].replace("-text", "");
+        return match[0];
+    }).replaceAll( /class="language-application-x-(\w+)"/g , (...match) => {
+        match[0] = match[0].replace("-application-x", "");
+        return match[0];
+    }).replaceAll( /class="language-application-(\w+)"/g , (...match) => {
+        match[0] = match[0].replace("-application", "");
+        return match[0];
+    }).replaceAll("language-application-javascript-env-backend" , "language-javascript").replaceAll("language-application-javascript-env-frontend" , "language-javascript");
+    
+
+    %>
+
+<body data-note-id="<%= note.noteId %>" data-ancestor-note-id="<%= subRoot.note.noteId %>">
+   
+
+  <div id="mobileMenuContainer"></div>
+    
+     <% if (subRoot.note.getLabelValue("ishomepageBG")==true ){ %>
+  <div id="globalBackground" style=""><img id="globalBackgroundImg" src="api/images/<%= subRoot.note.getRelation("homepageBG").value %>/主页背景" style="position: fixed;margin-left: auto;margin-right: auto;display: flex;-o-object-fit: cover;object-fit: cover;" width="auto" height="100%">
+    <div class="overlay"></div>
+  </div>
+      <% } %>
+    <header id="navigationBar" class="scroll-hide">
+    <div id="siteTitle">
+        <div class="logo">
+          <img src="api/images/<%= subRoot.note.getRelation("shareFavicon").value %>/logo.svg" alt="Logo" />
+        </div>
+        <a href="./index.html" title="返回主页"><%= siteName %></a>
+    </div>
+    <div id="navigationItems">
+        <!-- 导航 -->
+        <nav class="navbar-links">
+             <!-- 首页 -->
+        <div class="navbar-links__item navigationItemsStyle">
+            <a href="./index.html" title="home" class=" menuLinkStyle link ">home</a>
+        </div>
+
+ <!-- 动态生成导航 -->
+      <% subRoot.note.getVisibleChildNotes()[3].getVisibleChildNotes().forEach((childNote) =>{ %>
+      <div class="navbar-links__item navigationItemsStyle">
+        <% if (childNote.hasVisibleChildren()){ %>
+        <a title="<%=childNote.title%>" class=" menuLinkStyle link "><%=childNote.title%><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 10px; height: 10px; margin-left: 2px;">
+            <path d="M3 8L12 17L21 8"></path>
+          </svg></a>
+        <div class="dropDownStyle">
+          <% childNote.getVisibleChildNotes().forEach((subOption)=>{ %>
+          <% if (subOption.hasLabel("shareExternalLink")) {%>
+          <a href="<%=subOption.getLabelValue("shareExternalLink")%>" title="<%=subOption.title%>" class="menuLinkStyle" target="_blank" rel="noopener"><%=subOption.title%></a>
+          <%}else {%>
+          <a href="<%=subOption.shareId%>" title="<%=subOption.title%>" class="menuLinkStyle"><%=subOption.title%></a>
+          <%}}) %>
+        </div>
+        <%}else{%>
+        <% if (childNote.hasLabel("shareExternalLink")) {%>
+        <a href="<%=childNote.getLabelValue("shareExternalLink")%>" title="<%=childNote.title%>" class=" menuLinkStyle link " target="_blank" rel="noopener"><%=childNote.title%></a>
+        <%}else{%>
+        <a href="<%=childNote.shareId%>" title="<%=childNote.title%>" class="menuLinkStyle"><%=childNote.title%></a>
+        <%}}%>
+      </div>
+      <%})%>
+             <!-- 查询 -->
+      <div class="navbar-links__item navigationItemsStyle">
+        <div id="searchButton" class=" menuLinkStyle link " style="margin:0px;cursor: pointer;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+      </div>
+      <div id="toggleMenuButton"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg></div>
+      </nav>
+    </div>
+  </header>
+  <div style="display: flex;justify-content: center;">
+    <div id="searchContainer" class="searchContainerStyle">
+      <input type="text" id="searchInput" placeholder="请输入关键字进行查询文章...">
+      <div id="searchResults"></div>
+    </div>
+  </div>
+  <div id="layout">
+    <div id="main">
+        <!--如果是首页就不显示-->
+      <% if (note.title!='首页') { %>
+      <h1 id="title"><%= note.title %></h1>
+       <%} %>
+  
+        <!--文章详情顶部内容-->
+      <% if (note.hasLabel("date") && note.getLabelValue('date')!=null) { %>
+      <div id="contentHeader">
+       
+        <div style="display: flex;">
+             <!--发表日期-->
+             <div class="blogMetadate" title="发表日期">
+            <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span style="padding-left: 0.3em;"><%= note.getLabelValue("date").split("T")[0] %></span>
+          </div>
+            <!--文章字数-->
+            <div class="blogMetadate" title="本文字数">
+            <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <span id="articleWordCount" style="padding-left: 0.3em;">-</span>
+            <span>字</span>
+          </div>
+            <!--阅读量-->
+          <% if (subRoot.note.hasLabel("enableVisitors")) { %>
+          <div class="blogMetadate" title="阅读量">
+            <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span id="twikoo_visitors" style="padding-left: 0.3em;">-</span>
+          </div>
+          <% } %>
+        </div>
+          <!--标签-->
+           <div class="blogMetadate">
+          <% const tags = note.getLabelValues("tags");
+                          if (tags!=null ||tags!=undefined ||tags!=""){
+                              tags.forEach((tag)=>{ %>
+          <a href="./tag_<%= tag %>">
+            <div class="blogMetadateItems categoryBadge shakeStyle">
+              <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+              <div style="margin-left: 0.3rem;" id="tagNameMeta"><%= tag  %></div>
+            </div>
+          </a>
+          <%})} %>
+        </div>
+      </div>
+      <% } %>
+      <% if (note.hasLabel("pageUrl")) { %>
+      <div id="noteClippedFrom">This note was originally clipped from <a href="<%= note.getLabelValue("pageUrl") %>"><%= note.getLabelValue("pageUrl") %></a></div>
+      <% } %>
+      <% if (!isEmpty) { %>
+       <!-- 留言板块 -->
+      <% if (note.getLabelValue("categoryName") === "messages") { %>
+      <div class="msg">
+          <svg viewBox="15 0 800 500">
+  <symbol id="s-text">
+    <text text-anchor="middle" x="50%" y="35%" class="text--line" ><%= bloggerName%></text>
+  </symbol>
+  <g class="g-ants">
+    <use xlink:href="#s-text" class="text-copy"></use>
+    <use xlink:href="#s-text" class="text-copy"></use>
+    <use xlink:href="#s-text" class="text-copy"></use>
+    <use xlink:href="#s-text" class="text-copy"></use>
+    <use xlink:href="#s-text" class="text-copy"></use>
+  </g>
+</svg>
+        </div> 
+        <% }%>
+         <!-- 友链板块 -->
+      <% if (note.getLabelValue("categoryName") === "links") { %>
+      <div class="fLinkContainer">
+        <% const fLnksDate = content.replace(/<\/?pre>/g, '').replace(/[\n\s]/g, "");const fLinks = JSON.parse(fLnksDate); 
+                for (let key in fLinks) {%>
+        <a class="fLink cf-friends-link" href="<%= fLinks[key]['link'] %>" target="_blank" rel="noopener">
+          <img class="cf-friends-avatar" src="<%= fLinks[key]['img'] %>" alt="<%= fLinks[key]['title'] %>">
+            <div class="fLinkRight">
+            <div id="fLinkTitle" class="cf-friends-name"><%= fLinks[key]['title'] %></div>
+          <div id="fLinkDes"><%= fLinks[key]['des'] %></div>
+            </div>
+        </a>
+        <% }%>
+      </div>
+      <div>
+        <blockquote>
+          <p>声明：<%= note.getLabelValue("notes") %>
+          </p>
+        </blockquote>
+        <p>我的友链：</p>
+        <pre><code class="language-json">"title": "<%= note.getLabelValue("myTitle") %>",
+  "link": "<%= note.getLabelValue("myLink") %>",
+  "img": "<%= note.getLabelValue("myImg") %>",
+  "des": "<%= note.getLabelValue("myDes") %>"</code></pre>
+        <p>加入本站友链的格式：</p>
+        <pre><code class="language-json">{
+    "title": "博客名称",  //建议8个中文字符以内
+    "link": "博客链接",
+    "img": "站长头像",
+    "des": "博客描述"
+    }</code></pre>
+      </div>
+      <% } else if (note.getLabelValue("categoryName") === "朋友圈")  {%>
+      <div id="hexo-circle-of-friends-root"></div>
+      <script>
+        let UserConfig = {
+          private_api_url: '<%=note.getLabelValue("friendCircleUrl")%>',
+          page_init_number: 20,
+          page_turning_number: 10,
+          error_img: 'https://sdn.geekzu.org/avatar/57d8260dfb55501c37dde588e7c3852c',
+          sort_rule: 'created',
+          expire_days: 1,
+        }
+      </script>
+      <script type="text/javascript" src="https://npm.elemecdn.com/fcircle-theme-yyyz@1.0.13/dist/fcircle.min.js"></script>
+      <% } else if (note.getLabelValue("categoryName") === "现在")  {%>
+        <div id="content" class="type-<%= note.type %><% if (note.type === 'text') { %> ck-content<% } %>">
+          <%- content %>
+        </div>
+      <%- include('now') %>
+      <% } else if (note.getLabelValue("categoryName") === "归档")  {%>
+      <% const groupedNotes = Object.fromEntries(
+                 Object.entries(
+                   subRoot.note.getVisibleChildNotes()[5].getVisibleChildNotes().reduce((groupedNotes, note) => {
+                     const year = note.getLabelValue('date').slice(0, 4);
+                     if (!groupedNotes[year]) {
+                       groupedNotes[year] = [];
+                     }
+                     const index = groupedNotes[year].findIndex(n => n.date < note.getLabelValue('date'));
+                     if (index === -1) {
+                       groupedNotes[year].push({ date: note.getLabelValue('date'), title: note.title, link: note.noteId});
+                     } else {
+                       groupedNotes[year].splice(index, 0, { date: note.getLabelValue('date'), title: note.title, link: note.noteId});
+                     }
+                     return groupedNotes;
+                   }, {})
+                 )
+               )
+               const postYears = Object.keys(groupedNotes).sort((a, b) => b - a);
+             %>
+      <div id="content" class="timeline">
+        <% postYears.forEach(postYear =>{ %>
+        <div class="year">
+          <span class="yearLabel"><%=postYear%></span>
+          <% groupedNotes[postYear].forEach(item => { %>
+          <div class="post">
+            <div class="postDate"><%= item.date.slice(5,10) %></div>
+            <a class="postTitle" href="./<%= item.link %>"><%= item.title %></a>
+          </div>
+          <%})%>
+        </div>
+        <%})%>
+      </div>
+      <% } else if (note.getLabelValue("categoryName") === "标签云")  {%>
+      <% 
+             function getRandomColor() {
+                 const letters = '0123456789ABCDEF';
+                 let color = '#';
+                 for (let i = 0; i < 6; i++) {
+                     color += letters[Math.floor(Math.random() * 16)];
+                 }
+                 return color + 'A6';
+             }
+           %>
+      <div class="tagCloud">
+        <% subRoot.note.getVisibleChildNotes()[4].getVisibleChildNotes().forEach( tags => { %>
+        <a class="tagItem" style="background-color: <%= getRandomColor() %>;" href="./tag_<%= tags.title %>"><%=`${tags.title}(${tags.getVisibleChildNotes().length})`%></a>
+        <% }) %>
+      </div>
+      <% } else{%>
+      <div id="content" class="type-<%= note.type %><% if (note.type === 'text') { %> ck-content<% } %>">
+        <%- content %>
+      </div>
+      <% } %>
+      <% if (subRoot.note.hasLabel("enableReward") && note.hasLabel("showReward")) { %>
+      <div id="rewardContainer">
+        <button id="rewardBtn">🔋点我催更</button>
+        <p style="font-size: smaller;" class="coffee">“您的支持是我持续分享的动力”</p>
+        <div id="rewardImgContainer">
+          <div class="singleImgContainer">
+            <img class="rewardImg" src="api/images/<%= subRoot.note.getRelation("wechatPay").value %>/微信收款码" alt="微信收款码" />
+            <div class="wechatPay">微信</div>
+          </div>
+          <div class="singleImgContainer">
+            <img class="rewardImg" src="api/images/<%= subRoot.note.getRelation("aliPay").value %>/支付宝收款码" alt="支付宝收款码" />
+            <div class="aliPay">支付宝</div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+      <hr>
+      <% } %>
+
+      <% if (note.hasVisibleChildren()) { %>
+    
+      <nav id="childLinks" class="<% if (isEmpty) { %>grid<% } else { %>list<% } %>">
+        <% if (!isEmpty) { %>
+        <hr>
+        <% } %>
+          <!--首页动画效果-->
+         
+          <% if (note.getLabelValue("categoryName")==="首页") { %>
+          <div class="g-container">
+            <p class="title">拥抱变化 价值驱动 傻瓜化</p>
+              <p class="txt homeTxt"><%= subRoot.note.getLabelValue("motto")%></p>
+          </div>
+           <% } %>
+             
+          
+       
+          
+        <% const childNotes = note.getLabelValue("categoryName")==="首页" ? note.getVisibleChildNotes() :  note.getVisibleChildNotes();
+                    for (const childNote of childNotes) {
+                        const isExternalLink = childNote.hasLabel('shareExternalLink');
+                        const linkHref = isExternalLink ? childNote.getLabelValue('shareExternalLink') : `./${childNote.shareId}`;
+                        const target = isExternalLink ? `target="_blank" rel="noopener noreferrer"` : '';
+                    %>
+          
+        <div id="" style="<%= childNote.hasLabel("blogPostTop") ? 'order: -1' : ''%>" class="blogItems <%= note.getLabelValue("categoryName")==="soft"?'soft':'' %>">
+          <div class="blogItemsMainContain">
+            <a style="color: black;" href="<%= linkHref %>" <%= target %> class="type-<%= childNote.type %>">
+              <div>
+                <% if (childNote.hasLabel("blogPostTop")) { %>
+                <b class="blogPostTopStyle">📌置顶</b>
+                <% } %>
+                <b id="blogItemTitle"><%= childNote.title %></b>
+              </div>
+              <div class="blogContent">
+                
+                <% if (childNote.hasLabel("summary") && childNote.getLabelValue("summary")!=null) { %>
+                <div id="blogItemSummary" style="font-size:90%;color: #666;font-weight: 400;margin-top:5px;"><%= childNote.getLabelValue("summary") %></div>
+                <% } %>
+                  
+                  <% if (childNote.hasLabel("headerImage") && childNote.getLabelValue("headerImage")!=null) { %>
+                <div id="blogItemSummaryImgContain">
+                  <img src="<%= childNote.getLabelValue("headerImage") %>">
+                </div>
+
+                <% } %>
+              </div>
+            </a>
+            <div class="blogMetadate">
+                 <% if (childNote.hasLabel("date") && childNote.getLabelValue("date")!=null) { 
+                            const postDate = childNote.getLabelValue("date");
+                            %>
+              <div class="blogMetadateItems categoryBadge ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <div id="blogPostDate" style="margin-left: 0.3rem;" blogpostdate="<%= postDate %>"><%= getDaysAgo(postDate.split("T")[0])%></div>
+              </div>
+              <% } %>
+              
+              <a href="./category_<%= childNote.getLabelValue("category") %>">
+                <div class="blogMetadateItems categoryBadge shakeStyle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                  <div style="margin-left: 0.3rem;" id="categoryMeta"><%= childNote.getLabelValue("category")  %></div>
+                </div>
+              </a>
+
+             <% const tags = childNote.getLabelValues("tags");
+                              if (tags!=null ||tags!=undefined ||tags!=""){
+                                  tags.forEach((tag)=>{ %>
+              <a href="./tag_<%= tag %>">
+                <div class="blogMetadateItems categoryBadge shakeStyle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                  </svg>
+                  <div style="margin-left: 0.3rem;" id="tagNameMeta"><%= tag  %></div>
+                </div>
+              </a>
+              <%})} %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+      </nav>
+    
+      <% } else if (isEmpty) { %>
+      <p>施工中...</p>
+      <% } %>
+
+        <% const softchildNotes = note.getLabelValue("categoryName")==="soft" ? note.getVisibleChildNotes() :  note.getVisibleChildNotes();
+                    for (const childNote of softchildNotes) {
+                        const isExternalLink = childNote.hasLabel('shareExternalLink');
+                        const linkHref = isExternalLink ? childNote.getLabelValue('shareExternalLink') : `./${childNote.shareId}`;
+                        const target = isExternalLink ? `target="_blank" rel="noopener noreferrer"` : '';
+                    %>
+        
+          <% } %>
+         
+      <% if (subRoot.note.hasLabel("enableTwikoo")) { %>
+      <div style="display:<%= note.hasLabel("showComments")?"block":"none" %> !important">
+        <div id="tcomment"></div>
+      </div>
+      <script>
+        twikoo.init({
+          envId: "<%= subRoot.note.getLabelValue("envId") %>",
+          el: '#tcomment',
+        })
+      </script>
+      <% } %>
+        <div id="catalogue" title="目录">
+    
+        <svg t="1717586142000" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5561" width="24" height="24" style="margin-top:3px"><path d="M841 317.6H641c-28.7 0-52-23.3-52-52V84h46v181.6c0 3.3 2.7 6 6 6h200v46z" fill="#ffffff" p-id="5562" ></path><path d="M804 968H215c-29.2 0-53-23.8-53-53V121c0-29.2 23.8-53 53-53h41c12.7 0 23 10.3 23 23s-10.3 23-23 23h-41c-3.9 0-7 3.1-7 7v794c0 3.9 3.1 7 7 7h589c3.9 0 7-3.1 7-7V290.5L609.3 114H426c-12.7 0-23-10.3-23-23s10.3-23 23-23h192c5.6 0 11 2 15.1 5.7l216 189c5 4.4 7.9 10.7 7.9 17.3v635c0 29.2-23.8 53-53 53zM364.9 114h-39c-12.7 0-23-10.3-23-23s10.3-23 23-23h39c12.7 0 23 10.3 23 23s-10.3 23-23 23z" fill="#ffffff" p-id="5563"></path><path d="M308 266h36c7.7 0 14 6.3 14 14v36c0 7.7-6.3 14-14 14h-36c-7.7 0-14-6.3-14-14v-36c0-7.7 6.3-14 14-14zM423 275h101c12.7 0 23 10.3 23 23s-10.3 23-23 23H423c-12.7 0-23-10.3-23-23s10.3-23 23-23zM308 410h36c7.7 0 14 6.3 14 14v36c0 7.7-6.3 14-14 14h-36c-7.7 0-14-6.3-14-14v-36c0-7.7 6.3-14 14-14zM423 419h286c12.7 0 23 10.3 23 23s-10.3 23-23 23H423c-12.7 0-23-10.3-23-23s10.3-23 23-23z" fill="#ffffff" p-id="5564"></path><path d="M308 554h36c7.7 0 14 6.3 14 14v36c0 7.7-6.3 14-14 14h-36c-7.7 0-14-6.3-14-14v-36c0-7.7 6.3-14 14-14zM423 563h286c12.7 0 23 10.3 23 23s-10.3 23-23 23H423c-12.7 0-23-10.3-23-23s10.3-23 23-23z" fill="#ffffff" p-id="5565"></path><path d="M308 698h36c7.7 0 14 6.3 14 14v36c0 7.7-6.3 14-14 14h-36c-7.7 0-14-6.3-14-14v-36c0-7.7 6.3-14 14-14zM423 707h286c12.7 0 23 10.3 23 23s-10.3 23-23 23H423c-12.7 0-23-10.3-23-23s10.3-23 23-23z" fill="#ffffff" p-id="5566"></path></svg>
+        </div>
+      <div id="onGoTop" title="前往顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up" style="
+       color: #ffffff;
+   ">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      </div>
+    </div>
+    <div id="menuCard" class="cardContainerStyle" style="<%=subRoot.note.hasLabel("swapInfoCard")?"right:10px":"left:10px"%>">
+     <!--说说-->
+     <% if(subRoot.note.getLabelValue("enablePersonalDynamic")) {%>
+      <div id="recentActivityCard" class="bloggerInfoCardStyle" style="margin-left: auto;">
+        <a href="./recentActivity" style="color:black" title="浏览全部说说">
+          <div class="bloggerInfoTitleStyle">说说</div>
+        </a>
+        <hr>
+        <% subRoot.note.getVisibleChildNotes()[0].getVisibleChildNotes().slice(0,5).forEach((childNote)=>{%>
+        <div class="cardItemLinkStyle">
+          <b style="font-size: 0.6em;
+        display: inline-block;
+        width: 3.5em;
+        text-align: center;"><%= getDaysAgo(childNote.getLabelValue("date").split("T")[0])%></b>
+          <a href="./<%= childNote.shareId %>" title="<%=  childNote.title %>" class="menuLinkStyle"><%= childNote.title %></a>
+        </div>
+        <% }) %>
+      </div>
+      <% } %> 
+         <!--公告-->
+          <% if(subRoot.note.getLabelValue("announcement")) {%>
+      <div id="announcement" class="bloggerInfoCardStyle">
+        <div class="bloggerInfoTitleStyle">公告</div>
+        <hr>
+        <div style="text-align: left;text-indent: 1em;" class="bloggerInfoContentStyle"><%= subRoot.note.getLabelValue("announcement") %></div>
+      </div>
+<% } %>
+       <!--推荐阅读-->
+      <% if(subRoot.note.getLabelValue("enableRecommendedReading")) {%>
+      <div id="recommendedReadingCard" class="bloggerInfoCardStyle" style="margin-left: auto;">
+        <a href="./recommendedReading" style="color:black" title="浏览全部推荐">
+          <div class="bloggerInfoTitleStyle">推荐阅读</div>
+        </a>
+        <hr>
+        <% subRoot.note.getVisibleChildNotes()[2].getVisibleChildNotes().forEach((childNote)=>{%>
+        <div class="cardItemLinkStyle">
+          <b style="font-size: 0.8rem;">🔥</b>
+          <a href="./<%= childNote.shareId %>" title="<%=  childNote.title %>" class="menuLinkStyle"><%= childNote.title %></a>
+        </div>
+        <% }) %>
+      </div>
+      <% } %>
+        
+         <% if(subRoot.note.hasLabel("enableTwikoo") && !subRoot.note.hasLabel("disableLatestCommentPane")) {%>
+      <div id="recommendedReadingCard" class="bloggerInfoCardStyle">
+        <div class="bloggerInfoTitleStyle">最新评论</div>
+        <hr>
+        <div id="latestComment" class="cardItemLinkStyle" style="font-size: 13px;">加载中...</div>
+        <script>
+          twikoo.getRecentComments({
+            envId: "<%= subRoot.note.getLabelValue("envId") %>",
+            urls: [],
+            pageSize: 6,
+            includeReply: false
+          }).then(function(res) {
+            var cardItemLinkStyle = document.querySelector('#latestComment');
+            cardItemLinkStyle.innerText = "";
+            res.forEach((comment) => {
+              var link = document.createElement('a');
+              link.href = comment.url;
+              link.title = comment.commentText;
+              link.className = 'menuLinkStyle';
+              let content = comment.commentText.replace(/[\r\n\s]+/g, "");
+              link.innerText = `${comment.nick}: ${content}`;
+              cardItemLinkStyle.appendChild(link);
+            });
+          })
+        </script>
+      </div>
+      <%}%>
+    </div>
+    <% if (headingMatches.length > 1){ %>
+    <!-- 目录插件 -->
+    <%
+                const level = (m) => parseInt(m[1].replace(/[<h>]+/g, ""));
+    
+                const toc = [
+                    {
+                        level: level(headingMatches[0]),
+                        name: headingMatches[0][2],
+                        children: []
+                    }
+                ];
+                const last = (arr = toc) => arr[arr.length - 1];
+                const makeEntry = (m) => ({level: level(m), name: m[2], children: []});
+                const getLevelArr = (lvl, arr = toc) => {
+                    if (arr[0].level === lvl) return arr;
+                    const top = last(arr);
+                    return top.children.length ? getLevelArr(lvl, top.children) : top.children;
+                };
+    
+    
+                for (let m = 1; m < headingMatches.length; m++) {
+                    const target = getLevelArr(level(headingMatches[m]));
+                    target.push(makeEntry(headingMatches[m]));
+                }
+                %>
+    <div id="toc-pane" style="<%=subRoot.note.hasLabel("swapInfoCard")?"left:10px":"right:10px"%>">
+      <strong>页面导航</strong>
+      <ul id="toc">
+        <% for (const entry of toc) { %>
+        <%- include('toc_item', {entry}) %>
+        <% } %>
+      </ul>
+    </div>
+
+    <% }%>
+    <div id="bloggerInfoCard" class="cardContainerStyle" style="<%=subRoot.note.hasLabel("swapInfoCard")?"left:10px":"right:10px"%>; display:<%=headingMatches.length > 1?"none":"block"  %>">
+    <div id="bloggerInfo" class="bloggerInfoCardStyle">
+        <a href="./about" title="关于博主">
+          <img src=<%= bloggerAvatar %> href="./about">
+        </a>
+        <div id="bloggerInfoName" class="bloggerInfoTitleStyle"><%= bloggerName%></div>
+        <div id="motto" class="bloggerInfoContentStyle"><%= subRoot.note.getLabelValue("motto") %></div>
+    
+         <!--首页博主第三方-->
+          <%
+       const linkLabels = [
+         "githubLink",
+         "RSSLink",  
+         "zhihuLink",
+         "sspaiLink",
+         "netEaseCloudLink",
+         "bilibiliLink",
+         "doubanLink",
+         "telegramLink", 
+         "mailLink"
+       ];
+       const socialInformationExist =  linkLabels.some(element => {
+         if (subRoot.note.hasLabel(element)){
+           return true;
+         }
+       });
+       %>
+      <% if (socialInformationExist) {%>
+      <div id="otherPlatformBar">
+        <% if (subRoot.note.hasLabel("githubLink") && subRoot.note.getLabelValue("githubLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="github" href="<%= subRoot.note.getLabelValue("githubLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>GitHub</title>
+            <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("RSSLink") && subRoot.note.getLabelValue("RSSLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="RSS" href="<%= subRoot.note.getLabelValue("RSSLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>RSS</title>
+            <path d="M19.199 24C19.199 13.467 10.533 4.8 0 4.8V0c13.165 0 24 10.835 24 24h-4.801zM3.291 17.415c1.814 0 3.293 1.479 3.293 3.295 0 1.813-1.485 3.29-3.301 3.29C1.47 24 0 22.526 0 20.71s1.475-3.294 3.291-3.295zM15.909 24h-4.665c0-6.169-5.075-11.245-11.244-11.245V8.09c8.727 0 15.909 7.184 15.909 15.91z" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("zhihuLink") && subRoot.note.getLabelValue("zhihuLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="zhihu" href="<%= subRoot.note.getLabelValue("zhihuLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>知乎</title>
+            <path d="M5.721 0C2.251 0 0 2.25 0 5.719V18.28C0 21.751 2.252 24 5.721 24h12.56C21.751 24 24 21.75 24 18.281V5.72C24 2.249 21.75 0 18.281 0zm1.964 4.078c-.271.73-.5 1.434-.68 2.11h4.587c.545-.006.445 1.168.445 1.171H9.384a58.104 58.104 0 01-.112 3.797h2.712c.388.023.393 1.251.393 1.266H9.183a9.223 9.223 0 01-.408 2.102l.757-.604c.452.456 1.512 1.712 1.906 2.177.473.681.063 2.081.063 2.081l-2.794-3.382c-.653 2.518-1.845 3.607-1.845 3.607-.523.468-1.58.82-2.64.516 2.218-1.73 3.44-3.917 3.667-6.497H4.491c0-.015.197-1.243.806-1.266h2.71c.024-.32.086-3.254.086-3.797H6.598c-.136.406-.158.447-.268.753-.594 1.095-1.603 1.122-1.907 1.155.906-1.821 1.416-3.6 1.591-4.064.425-1.124 1.671-1.125 1.671-1.125zM13.078 6h6.377v11.33h-2.573l-2.184 1.373-.401-1.373h-1.219zm1.313 1.219v8.86h.623l.263.937 1.455-.938h1.456v-8.86z" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("sspaiLink") && subRoot.note.getLabelValue("sspaiLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="sspai" href="<%= subRoot.note.getLabelValue("sspaiLink") %>"><svg data-v-b3f1de54="" data-v-fda2b58a="" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" viewBox="0 0 36 36">
+            <title>少数派</title>
+            <path data-v-b3f1de54="" d="M18,0C8.1,0,0,8.1,0,18s8.1,18,18,18s18-8.1,18-18S27.9,0,18,0z M26.9,11.6c0,0.2-0.1,0.3-0.2,0.5
+            c-0.1,0.1-0.3,0.2-0.4,0.2l-3.3,0.6v8.3c0,0.5,0.1,1,0.3,1.4l2.1,4c0.1,0.1,0.1,0.2,0.1,0.3c0,0.1,0,0.2-0.1,0.3
+            c-0.1,0.1-0.1,0.2-0.3,0.2c-0.1,0.1-0.2,0.1-0.3,0.1H23c-0.1,0-0.3,0-0.4-0.1c-0.1-0.1-0.2-0.2-0.3-0.3l-2.1-3.9
+            c-0.2-0.5-0.4-1-0.4-1.5v-8.4l-4.6,0.8v11.4c0,0.2,0,0.4-0.1,0.5c-0.1,0.2-0.2,0.3-0.4,0.4l-1.3,0.8c-0.1,0.1-0.3,0.1-0.4,0.1
+            s-0.3,0-0.4-0.1c-0.1-0.1-0.2-0.2-0.3-0.3c-0.1-0.1-0.1-0.3-0.1-0.4v-12l-3.4,0.6c-0.1,0-0.2,0-0.4,0c-0.1,0-0.2-0.1-0.3-0.2
+            C8.1,14.9,8,14.8,8,14.6c0-0.1-0.1-0.2,0-0.4l0.2-1.4c0-0.2,0.1-0.3,0.2-0.5c0.1-0.1,0.3-0.2,0.5-0.2l17.4-2.9c0.1,0,0.3,0,0.4,0
+            c0.1,0,0.2,0.1,0.3,0.2C26.9,9.5,27,9.6,27,9.7c0,0.1,0.1,0.2,0,0.4L26.9,11.6z" class="logo"></path>
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("netEaseCloudLink") && subRoot.note.getLabelValue("netEaseCloudLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="netEaseCloud" href="<%= subRoot.note.getLabelValue("netEaseCloudLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>网易云音乐</title>
+            <path d="M13.046 9.388a3.919 3.919 0 0 0-.66.19c-.809.312-1.447.991-1.666 1.775a2.269 2.269 0 0 0-.074.81c.048.546.333 1.05.764 1.35a1.483 1.483 0 0 0 2.01-.286c.406-.531.355-1.183.24-1.636-.098-.387-.22-.816-.345-1.249a64.76 64.76 0 0 1-.269-.954zm-.82 10.07c-3.984 0-7.224-3.24-7.224-7.223 0-.98.226-3.02 1.884-4.822A7.188 7.188 0 0 1 9.502 5.6a.792.792 0 1 1 .587 1.472 5.619 5.619 0 0 0-2.795 2.462 5.538 5.538 0 0 0-.707 2.7 5.645 5.645 0 0 0 5.638 5.638c1.844 0 3.627-.953 4.542-2.428 1.042-1.68.772-3.931-.627-5.238a3.299 3.299 0 0 0-1.437-.777c.172.589.334 1.18.494 1.772.284 1.12.1 2.181-.519 2.989-.39.51-.956.888-1.592 1.064a3.038 3.038 0 0 1-2.58-.44 3.45 3.45 0 0 1-1.44-2.514c-.04-.467.002-.93.128-1.376.35-1.256 1.356-2.339 2.622-2.826a5.5 5.5 0 0 1 .823-.246l-.134-.505c-.37-1.371.25-2.579 1.547-3.007.329-.109.68-.145 1.025-.105.792.09 1.476.592 1.709 1.023.258.507-.096 1.153-.706 1.153a.788.788 0 0 1-.54-.213c-.088-.08-.163-.174-.259-.247a.825.825 0 0 0-.632-.166.807.807 0 0 0-.634.551c-.056.191-.031.406.02.595.07.256.159.597.217.82 1.11.098 2.162.54 2.97 1.296 1.974 1.844 2.35 4.886.892 7.233-1.197 1.93-3.509 3.177-5.889 3.177zM0 12c0 6.627 5.373 12 12 12s12-5.373 12-12S18.627 0 12 0 0 5.373 0 12Z" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("bilibiliLink") && subRoot.note.getLabelValue("bilibiliLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="bilibili" href="<%= subRoot.note.getLabelValue("bilibiliLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>哔哩哔哩</title>
+            <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373Z" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("doubanLink") && subRoot.note.getLabelValue("doubanLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="douban" href="<%= subRoot.note.getLabelValue("doubanLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>豆瓣</title>
+            <path d="M.51 3.06h22.98V.755H.51V3.06Zm20.976 2.537v9.608h-2.137l-1.669 5.76H24v2.28H0v-2.28h6.32l-1.67-5.76H2.515V5.597h18.972Zm-5.066 9.608H7.58l1.67 5.76h5.501l1.67-5.76ZM18.367 7.9H5.634v5.025h12.733V7.9Z" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("telegramLink") && subRoot.note.getLabelValue("telegramLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="telegram" href="<%= subRoot.note.getLabelValue("telegramLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>Telegram</title>
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+          </svg>
+        </a>
+        <% } %>
+        <% if (subRoot.note.hasLabel("mailLink") && subRoot.note.getLabelValue("mailLink")!=null) { %>
+        <a class="platformStyle" target="_blank" rel="noopener" title="mail" href="mailto:Email:<%= subRoot.note.getLabelValue("mailLink") %>"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <title>邮件</title>
+            <path d="M15.61 12c0 1.99-1.62 3.61-3.61 3.61-1.99 0-3.61-1.62-3.61-3.61 0-1.99 1.62-3.61 3.61-3.61 1.99 0 3.61 1.62 3.61 3.61M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12c2.424 0 4.761-.722 6.76-2.087l.034-.024-1.617-1.879-.027.017A9.494 9.494 0 0 1 12 21.54c-5.26 0-9.54-4.28-9.54-9.54 0-5.26 4.28-9.54 9.54-9.54 5.26 0 9.54 4.28 9.54 9.54a9.63 9.63 0 0 1-.225 2.05c-.301 1.239-1.169 1.618-1.82 1.568-.654-.053-1.42-.52-1.426-1.661V12A6.076 6.076 0 0 0 12 5.93 6.076 6.076 0 0 0 5.93 12 6.076 6.076 0 0 0 12 18.07a6.02 6.02 0 0 0 4.3-1.792 3.9 3.9 0 0 0 3.32 1.805c.874 0 1.74-.292 2.437-.821.719-.547 1.256-1.336 1.553-2.285.047-.154.135-.504.135-.507l.002-.013c.175-.76.253-1.52.253-2.457 0-6.617-5.383-12-12-12" />
+          </svg>
+        </a>
+        <% } %>
+      </div>
+      <% } %>
+    </div>
+     
+        <!-- 类别-->
+        <div class="bloggerInfoCardStyle caregoryCard">
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg> 文章类别</p>
+            <div class="cardheight">
+         <% subRoot.note.getVisibleChildNotes()[1].getVisibleChildNotes().forEach((childNote)=> { %>
+          <a href="<%= childNote.shareId %>" title="<%= childNote.title %>" style="display: flex;justify-content: space-between;align-items: center;font-size: 16px;" class="menuLinkStyle">
+              <div class="title"><%= childNote.title %></div>
+            <div id="articleCount"><%= childNote.getVisibleChildNotes().length %></div>
+          </a>
+          <% })%>
+        </div>
+            </div>
+          <!-- 标签-->
+        <div class="bloggerInfoCardStyle caregoryCard">
+            <p><svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag">
+                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                  </svg>标签</p>
+            <div>
+            <% 
+             function getRandomColor() {
+                 const letters = '0123456789ABCDEF';
+                 let color = '#';
+                 for (let i = 0; i < 6; i++) {
+                     color += letters[Math.floor(Math.random() * 16)];
+                 }
+                 return color + 'A6';
+             }
+           %>
+      <div class="tag cardheight">
+        <% subRoot.note.getVisibleChildNotes()[4].getVisibleChildNotes().forEach( tags => { %>
+        <a class="tagItem" style="border:1px solid <%= getRandomColor() %>;" href="./tag_<%= tags.title %>"><%=`${tags.title}(${tags.getVisibleChildNotes().length})`%></a>
+        <% }) %>
+      </div>
+            </div>
+        </div>
+      
+     
+        </div>
+    
+      </div>
+      </div>
+    <!--更新-->
+      <div id="footer">
+         <span>本站已稳定运行：<%= Math.ceil((new Date() - new Date(subRoot.note.getLabelValue("blogStartTime"))) / (24 * 60 * 60 * 1000)) %>天</span>
+         <span><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" class="xicon-icon" style="width:18px;height:14px;font-size:18px;color:inherit;"><path d="M14 16.59L11.41 14L10 15.41l4 4l8-8L20.59 10L14 16.59z" fill="currentColor"></path><path d="M16 30l-6.176-3.293A10.982 10.982 0 0 1 4 17V4a2.002 2.002 0 0 1 2-2h20a2.002 2.002 0 0 1 2 2v13a10.982 10.982 0 0 1-5.824 9.707zM6 4v13a8.985 8.985 0 0 0 4.766 7.942L16 27.733l5.234-2.79A8.985 8.985 0 0 0 26 17V4z" fill="currentColor"></path></svg>
+              <a class="platformStyle" target="_blank" title=" <%= subRoot.note.getLabelValue("record") %>" href="<%= subRoot.note.getLabelValue("recordLink") %>">
+              <span class="xicon-content" style="color:inherit;font-size:14px;">
+             <%= subRoot.note.getLabelValue("record") %>
+             </span>
+             </a>
+         </span>
+         <span> 
+           <svg class="xicon-icon" style="width:18px;height:14px;font-size:18px;color:inherit;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M14 9.75a3.016 3.016 0 0 0-4.163.173a2.993 2.993 0 0 0 0 4.154A3.016 3.016 0 0 0 14 14.25"></path></g></svg>
+             <span class="xicon-content" style="color:inherit;font-size:14px;">
+                  <%= subRoot.note.getLabelValue("bloggerName") %> <%= subRoot.note.getLabelValue("blogStartTime").slice(0,4) %>-<%= new Date().getFullYear() %>. All Rights Reserved.
+             </span>
+         </span>
+  </div>
+</body>
+
+</html>

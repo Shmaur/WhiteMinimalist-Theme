@@ -1,0 +1,35 @@
+.fLink:hover {
+    transform: scale(1.04);
+}  
+.fLinkContainer{
+             display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+         }
+         .fLinkContainer .cf-friends-link{
+         display: flex;
+        border: 1px solid #ededed;
+        padding: 14px 16px;
+        border-radius: 6px;
+        width: 240px;
+             flex-direction: row;
+         max-height: none;
+    min-height: auto;
+             margin: 10px;
+             align-items: center;
+transition: transform .3s ease-in-out;
+
+         }
+         .fLinkContainer .cf-friends-link .cf-friends-avatar{
+         border-radius: 50% !important;
+        margin-right: 12px !important;
+                 margin-bottom: auto !important;
+         }
+          #fLinkTitle{
+         color: #393939;
+         
+         }
+          #fLinkDes{
+             font-size: 14px;
+            color: #ababab;
+         }

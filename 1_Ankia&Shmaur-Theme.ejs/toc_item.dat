@@ -1,0 +1,20 @@
+<%
+const slugify = (text) => text.replace(/\s/g, " ");
+const regex = /(<([^>]+)>)/ig;
+const slug = slugify(entry.name).replace(regex, '')
+%>
+
+
+<li>
+    <a href="#<%= slug %>">
+        <%= slug %>
+    </a>
+
+    <% if (entry.children.length) { %>
+        <ul>
+            <% for (const subentry of entry.children) { %>
+                <%- include('toc_item', {entry: subentry}) %>
+            <% } %>
+        </ul>
+    <% } %>
+</li>

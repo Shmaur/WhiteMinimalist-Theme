@@ -1,0 +1,32 @@
+ #footer {
+            border-top-width: 1px;
+            border-style: solid;
+            border-bottom-width: 0px;
+            height: 30px;
+            width: auto;
+            --tw-border-opacity: 1;
+            border-color: rgb(234 236 239 / var(--tw-border-opacity));
+            padding-top: 22px;
+            padding-bottom: 22px;
+            text-align: center;
+            font-weight: 500;
+             font-size:14px;
+        }
+
+        .xicon-container.left {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .xicon-container {
+            display: inline-flex;
+            cursor: pointer;
+        }
+
+        svg {
+            display: inline-block;
+        }
+
+        .xicon-container.left>svg {
+            margin-right: .375rem;
+        }
