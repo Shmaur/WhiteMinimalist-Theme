@@ -1,6 +1,6 @@
 ## 介绍
 Ankia-shmaur-Theme-trilium 是基于 Trilium 分享功能搭建的一个博客站点，可以创建很好看的网站。
-本样式主题是基于 Ankia-Theme 样式主题从新设计修改版本，原 Ankia-Theme 主题地址[https://github.com/dvai/Ankia-Theme?tab=readme-ov-file#introduction](https://github.com/dvai/Ankia-Theme?tab=readme-ov-file#introduction)
+本样式主题是基于 Ankia-Theme 样式主题从新设计修改版本，原 Ankia-Theme 主题地址[Ankia-Theme](https://github.com/dvai/Ankia-Theme?tab=readme-ov-file#introduction)
 
 本主题主题预览：[shmaur](https://www.shmaur.com/)
 本主题使用方式：[使用手册，转载与 Ankia-Theme 内容修改](https://www.shmaur.com/6gBePxfRSctO)
