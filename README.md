@@ -1,5 +1,5 @@
 ## 介绍
-Ankia-shmaur-Theme-trilium 是基于 Trilium 分享功能搭建的一个博客站点，可以创建很好看的网站。
+WhiteMinimalist-Theme 是基于 Trilium 分享功能搭建的一个博客站点，是一个白色简约博客主题。
 本样式主题是基于 Ankia-Theme 样式主题从新设计修改版本，原 Ankia-Theme 主题地址[Ankia-Theme](https://github.com/dvai/Ankia-Theme?tab=readme-ov-file#introduction)
 
 本主题主题预览：[点击预览shmaur](https://www.shmaur.com/)  
