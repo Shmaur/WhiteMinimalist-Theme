@@ -1,0 +1,358 @@
+/*!
+ * WhiteMinimalist-Theme v1.1
+ * https://www.shmaur.com/
+ *
+ * Licensed Apache-2.0 © shmaur
+ */
+
+#navigationBar {
+            z-index: 30;
+            display: flex;
+            height: 4rem;
+            box-shadow: none;
+            align-items: center;
+            background-color: #fff9;
+            box-shadow: 0 5px 5px #EEE;
+            backdrop-filter: blur(2px);
+            /* --tw-backdrop-blur: blur(24px);
+            --tw-backdrop-saturate: saturate(1.5);
+            -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+            backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia); */
+        }
+
+        @media (max-width: 70em) {
+            #navigationBar {
+        height: 5rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .navbar-container {
+                padding-left: 2rem;
+                padding-right: 2rem
+            }
+        }
+
+        #siteTitle {
+
+            display: flex;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            font-weight: 600;
+        }
+        @media (max-width: 70em) {
+             #siteTitle {
+            margin: 12px 0;
+                  }
+        }
+
+        #siteTitle .logo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        #navigationItems {
+           /* position: absolute;
+            right: 1rem;
+            top: 0px; */
+            text-shadow: none;
+            
+            display: flex;
+            height: 4rem;
+            align-items: center;
+            white-space: nowrap;
+            border-top:none;
+        }
+
+        @media (max-width: 70em) {
+            #navigationItems {
+                width: auto;
+                position: unset;
+                
+                overflow-x: auto;
+            }
+        }
+
+
+        @media (min-width: 768px) {
+            .navbar-links {
+                margin-left: 1.5rem
+            }
+        }
+
+        #navigationItems .navbar-links {
+            align-items: center
+        }
+
+        @media (min-width: 768px) {
+            .navbar-links {
+                display: inline-flex
+            }
+        }
+@media (max-width: 70em) {
+ #navigationItems .navbar-links {
+                display: inline-flex
+                
+            }
+}
+
+        .navbar-links .navbar-links__item {
+            display: block;
+            padding-top: 0;
+            padding-bottom: 0
+        }
+
+       
+
+        .navbar-links .navbar-links__item:not(:first-child) {
+            margin-left: 0
+        }
+
+        @media (min-width: 768px) {
+            .navbar-links .navbar-links__item:not(:first-child) {
+                margin-left: 1.5rem
+            }
+        }
+
+        .navbar-links .navbar-links__item>.link {
+            display: flex;
+            align-items: center;
+            font-size: .875rem;
+            line-height: 1.25rem;
+            font-weight: 600
+        }
+
+        .navbar-links .navbar-links__item>.link .xicon-container {
+            margin-right: .125rem
+        }
+
+        .navbar-links .navbar-links__item .router-link-active {
+            --tw-text-opacity: 1 !important;
+            color: rgb(93 103 232 / var(--tw-text-opacity)) !important
+        }
+
+        .navbar-links__item>a,
+        .navbar-links__item .dropdown-link__title {
+            height: 3.5rem
+        }
+.dropDownStyle{
+             background:#FFF;
+         }
+         .dropDownStyle>a{
+             max-width: 180px;
+            overflow: hidden;
+             white-space: nowrap;
+             text-overflow: ellipsis;
+             font-size: 14px;
+             padding:0.3rem 0 
+         }
+
+ .menuLinkStyle{
+         font-size: 14px;
+         width:100%;
+             padding: 6px 0;
+        cursor: pointer;
+         }
+
+.navbar-links-mobile{
+   margin-top: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: block;
+    background-color: #fff;
+    padding: 1rem;
+    z-index: 9999;
+}
+.submenu {
+    display: none; /* Hidden by default */
+    transition: max-height 0.3s ease-out;
+  }
+
+  .submenu.active {
+   width: 100%;
+      display: flex;
+    flex-wrap: wrap;
+      font-size: 14px;
+    background-color: #f9f9f9;
+  }
+.submenu a{
+    width:100%;
+    padding: 10px 0;
+    padding-left: 26px;
+}
+
+.navbar-links-mobile.active {
+    display: block;
+        overflow: overlay;
+    overflow-y: auto;
+  }
+.with-submenu.active svg {
+    transform: rotate(-180deg);
+  }
+ .navbar-links__item .link svg {
+   
+    transition: transform 0.3s;
+  }
+
+.navigationItemsStyle-mobile{
+display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0px 5px;
+    width: 100%;
+        background-color: #FFF;
+}
+
+#toggleMenuButton {
+  border: none;
+  background: #ffffff00;
+  z-index: 1000;
+  width: 1em;
+  height: 1em;
+  display: none;
+  color: black;
+  cursor: pointer;
+  position: absolute;
+  right: 0.5em;
+}
+
+#toggleMenuButton .feather-menu line {
+  transition: all 0.3s ease;
+}
+
+#toggleMenuButton.active .feather-menu line:first-child {
+  opacity: 0;
+  transform: translate(-100%, 0);
+}
+
+#toggleMenuButton.active .feather-menu line:nth-child(2) {
+  transform: translate(0, 6px);
+  rotate: 45deg;
+  transform-origin: center;
+}
+
+#toggleMenuButton.active .feather-menu line:last-child {
+  transform: translate(0, -6px);
+  rotate: -45deg;
+  transform-origin: center;
+}
+#searchButton-mobile{
+    display:none;
+}
+
+
+
+.left-menu-nav{
+        animation: fromLeftToRightAppearing 0.5s ease-in-out;
+ position: fixed;
+    top: 80px;           /* 距离顶部 80px */
+    left: 32px;
+    width: 260px;        /* 宽度 320px */
+    height: calc(100vh - 70px); /* 高度铺满屏幕（减去顶部 80px） */
+    overflow-y: auto;    /* 纵向滚动条 */
+    display:block;
+    opacity: .5;
+}
+.left-menu-nav:hover{
+opacity: 1;
+}
+
+/* 树节点的样式 */
+.left-menu-nav ul {
+    padding-left: 0px; /* 层级缩进 */
+    color: #666;
+    font-size:14px;
+}
+
+.left-menu-nav ul > li {
+    list-style-type: none;
+
+}
+.left-menu-nav ul > li ul > li ul {
+    padding-left: 28px;
+}
+
+.menulist{
+    padding:6px 0;
+}
+.menu-tree-root{
+ padding-left: 0;
+    height: calc(100vh - 130px); /* 计算 ul 的高度，确保在页面内显示 */
+    overflow-y: auto; /* 启用滚动 */
+}
+
+
+/* 树节点的标题样式 */
+.node-title {
+    cursor: pointer;
+    display: block;
+    padding: 5px;
+    border-radius: 4px;
+    color: #333;
+    font-weight: bold;
+    white-space: nowrap;       /* 禁止换行 */
+    overflow: hidden;          /* 隐藏超出内容 */
+    text-overflow: ellipsis;   /* 显示省略号 */
+}
+
+/* 树节点的选中样式 */
+.node-title.selected, 
+.leaf-title.selected { /* 同时应用于叶节点 */
+    color: var(--blue);             /* 字体颜色改变 */
+    font-weight: bold;          /* 加粗 */
+    padding-left: 8px;          /* 调整内边距以适应边框 */
+}
+/* 树节点的 hover 样式 */
+.node-title:hover {
+    background-color: #f0f0f0;
+}
+
+/* 树叶节点（无子节点）的样式 */
+.leaf-title {
+    cursor: default;
+    display: block;
+    padding: 5px;
+    color: #666;
+cursor: pointer;
+    white-space: nowrap;       /* 禁止换行 */
+    overflow: hidden;          /* 隐藏超出内容 */
+    text-overflow: ellipsis;   /* 显示省略号 */
+}
+
+/* 树叶节点的 hover 样式 */
+.leaf-title:hover {
+    background-color: #f9f9f9;
+}
+/* 左侧导航 */
+.menu-hidden{
+    display:none;
+}
+
+
+ @media (min-width: 768px) {
+            .navbar-links .navbar-links__item {
+                display: inline-block
+                    padding-right:8px;
+            }
+            .left-menu-nav{
+    display:none;
+}
+        }
+
+
+@media (max-width: 70em) {
+.left-menu-nav{
+                display:none;
+            }
+}
+ @media (min-width: 1340px) {
+           
+            .left-menu-nav{
+                display:block;
+            }
+        }
