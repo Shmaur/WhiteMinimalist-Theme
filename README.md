@@ -6,6 +6,7 @@ WhiteMinimalist-Theme 是基于 Trilium 分享功能搭建的一个博客站点�
 本主题使用方式：[使用手册](https://www.shmaur.com/6gBePxfRSctO)  
 
 ## 相较于 Trilium 自带的分享功能，本主题有以下特点
+- 支持暗黑风格与浅色风格主题切换
 - 支持标签体系地图  
 - 支持嵌入文档渲染，include note；官方无法渲染分享的include note笔记  
 - 拥有一套完整的博客系统  
@@ -24,12 +25,12 @@ WhiteMinimalist-Theme 是基于 Trilium 分享功能搭建的一个博客站点�
 - 支持版权说明  
 
 ## 预览图
-首页  
-![微信图片_20240817235336](https://github.com/user-attachments/assets/6061773d-c61c-4877-9659-19a2779d23f4)  
-标签体系地图(最新暂未发布)
-![标签体系地图](https://github.com/user-attachments/assets/e72e8943-52c2-467c-b121-2e9eea9962b2)
+首页（暗黑风格和浅色风格）  
+<img width="1449" height="1003" alt="`D27FRNT9SBQ21K6DFN_@GS" src="https://github.com/user-attachments/assets/29f5761a-7eae-4626-bc8b-c897f77281df" />
+<img width="1449" height="1003" alt="image" src="https://github.com/user-attachments/assets/c539005d-8d7d-4288-a927-c953b06d9e80" />
 
-
+标签体系地图
+<img width="1449" height="1003" alt="image" src="https://github.com/user-attachments/assets/58d59604-ff77-4475-b0a9-fb7c459d7e2a" />
 
 ## 安装
 导入本主题到 Trilium，以下为导入步骤  
@@ -54,9 +55,13 @@ WhiteMinimalist-Theme 是基于 Trilium 分享功能搭建的一个博客站点�
 ## 捐赠
 如果您喜欢这个主题，请考虑支持我。非常感谢您的贡献！  
 微信：  
-![image](https://github.com/user-attachments/assets/7b60bdba-c578-4051-86e6-08edd59c6051)
+<img width="149" height="148" alt="image" src="https://github.com/user-attachments/assets/72d71974-82ad-4349-b781-8aa9348c883a" />
+
+
 支付宝：  
-![image](https://github.com/user-attachments/assets/0df6645f-849a-4a06-a53e-e2ca4336f7b2)
+<img width="183" height="182" alt="image" src="https://github.com/user-attachments/assets/ef5edddd-c2fc-479a-ace0-85b949fac28a" />
+
+
 
 
 
